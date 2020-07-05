@@ -7,4 +7,4 @@
      - в поле телефонного номера вводится неправильное значение 
 3. Настроен CI
 
-## Project [![Build status](https://ci.appveyor.com/api/projects/status/7qcwv47wv8gtyewx/branch/master?svg=true)](https://ci.appveyor.com/project/pava-14/aqa2-1-2/branch/master)
+## Project [![Build status](https://ci.appveyor.com/api/projects/status/7qcwv47wv8gtyewx/branch/selenium?svg=true)](https://ci.appveyor.com/project/pava-14/aqa2-1-2/branch/selenium)
