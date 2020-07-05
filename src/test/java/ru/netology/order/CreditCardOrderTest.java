@@ -14,7 +14,7 @@ public class CreditCardOrderTest {
         open("http://localhost:9999");
         SelenideElement form = $("form");
         form.$("[data-test-id=name] input").setValue("Петров Иван Петрович");
-        form.$("[data-test-id=phone] input").setValue("2222222222222222222222222222222222");
+        form.$("[data-test-id=phone] input").setValue("+79099099090");
         form.$("[data-test-id=agreement]").click();
         form.$("button[type=button]").click();
         $("[data-test-id=phone] .input__sub")
