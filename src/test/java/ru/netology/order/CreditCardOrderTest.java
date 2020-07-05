@@ -34,6 +34,23 @@ public class CreditCardOrderTest {
     }
 
     @Test
+    public void shouldCreditCardOrderSuccess() {
+        driver.get("http://localhost:9999");
+
+        WebElement form = driver.findElement(By.cssSelector("form"));
+        form.findElement(By.cssSelector(
+                "[data-test-id=name] input")).sendKeys("Иванов Иван Петрович");
+        form.findElement(By.cssSelector(
+                "[data-test-id=phone] input")).sendKeys("+79099009090");
+        form.findElement(By.cssSelector("[data-test-id=agreement]")).click();
+        form.findElement(By.cssSelector("button[type=button]")).click();
+        String text = driver.findElement(By.cssSelector(
+                "[data-test-id=order-success]")).getText();
+
+        assertEquals("Ваша заявка успешно отправлена! Наш менеджер свяжется с вами в ближайшее время.", text.trim());
+    }
+
+    @Test
     public void shouldCreditCardOrderUnsuccessWithEmptyName() {
         driver.get("http://localhost:9999");
 
