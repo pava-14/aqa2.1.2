@@ -10,7 +10,19 @@ import static com.codeborne.selenide.Selenide.open;
 public class CreditCardOrderTest {
 
     @Test
-    public void shouldCreditCardOrderUnsuccess() {
+    public void shouldCreditCardOrderUnsuccessWithName() {
+        open("http://localhost:9999");
+        SelenideElement form = $("form");
+        form.$("[data-test-id=name] input").setValue("");
+        form.$("[data-test-id=phone] input").setValue("+79099009090");
+        form.$("[data-test-id=agreement]").click();
+        form.$("button[type=button]").click();
+        $(".input_invalid[data-test-id=name] .input__sub")
+                .shouldHave(exactText("Поле обязательно для заполнения"));
+    }
+
+    @Test
+    public void shouldCreditCardOrderUnsuccessWithPhone() {
         open("http://localhost:9999");
         SelenideElement form = $("form");
         form.$("[data-test-id=name] input").setValue("Петров Иван Петрович");
@@ -20,4 +32,5 @@ public class CreditCardOrderTest {
         $(".input_invalid[data-test-id=phone] .input__sub")
                 .shouldHave(exactText("Телефон указан неверно. Должно быть 11 цифр, например, +79012345678."));
     }
+
 }
