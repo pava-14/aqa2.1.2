@@ -17,7 +17,7 @@ public class CreditCardOrderTest {
         form.$("[data-test-id=phone] input").setValue("+2222222222222222222222222222222222");
         form.$("[data-test-id=agreement]").click();
         form.$("button[type=button]").click();
-        $("[data-test-id=phone] .input__sub")
+        $(".input_invalid[data-test-id=phone] .input__sub")
                 .shouldHave(exactText("Телефон указан неверно. Должно быть 11 цифр, например, +79012345678."));
     }
 }
