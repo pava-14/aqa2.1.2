@@ -1,36 +1,86 @@
 package ru.netology.order;
 
-import com.codeborne.selenide.SelenideElement;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
-import static com.codeborne.selenide.Condition.exactText;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.open;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CreditCardOrderTest {
+    private WebDriver driver;
+
+    @BeforeAll
+    static void setUpAll() {
+        System.setProperty("webdriver.chrome.driver", "..\\webdriver\\chromedriver.exe");
+    }
+
+    @BeforeEach
+    void setUp() {
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--headless");
+        driver = new ChromeDriver(options);
+    }
+
+    @AfterEach
+    void tearDown() {
+        driver.quit();
+        driver = null;
+    }
 
     @Test
-    public void shouldCreditCardOrderUnsuccessWithName() {
-        open("http://localhost:9999");
-        SelenideElement form = $("form");
-        form.$("[data-test-id=name] input").setValue("");
-        form.$("[data-test-id=phone] input").setValue("+79099009090");
-        form.$("[data-test-id=agreement]").click();
-        form.$("button[type=button]").click();
-        $(".input_invalid[data-test-id=name] .input__sub")
-                .shouldHave(exactText("Поле обязательно для заполнения"));
+    public void shouldCreditCardOrderUnsuccessWithEmptyName() {
+        driver.get("http://localhost:9999");
+
+        WebElement form = driver.findElement(By.cssSelector("form"));
+        form.findElement(By.cssSelector(
+                "[data-test-id=name] input")).sendKeys("");
+        form.findElement(By.cssSelector(
+                "[data-test-id=phone] input")).sendKeys("+79099009090");
+        form.findElement(By.cssSelector("[data-test-id=agreement]")).click();
+        form.findElement(By.cssSelector("button[type=button]")).click();
+        String text = driver.findElement(By.cssSelector(
+                ".input_invalid[data-test-id=name] .input__sub")).getText();
+
+        assertEquals("Поле обязательно для заполнения", text.trim());
+    }
+
+    @Test
+    public void shouldCreditCardOrderUnsuccessWithLatinName() {
+        driver.get("http://localhost:9999");
+
+        WebElement form = driver.findElement(By.cssSelector("form"));
+        form.findElement(By.cssSelector(
+                "[data-test-id=name] input")).sendKeys("Ivanov Ivan");
+        form.findElement(By.cssSelector(
+                "[data-test-id=phone] input")).sendKeys("+79099009090");
+        form.findElement(By.cssSelector("[data-test-id=agreement]")).click();
+        form.findElement(By.cssSelector("button[type=button]")).click();
+        String text = driver.findElement(By.cssSelector(
+                ".input_invalid[data-test-id=name] .input__sub")).getText();
+
+        assertEquals("Имя и Фамилия указаные неверно. Допустимы только русские буквы, пробелы и дефисы.", text.trim());
     }
 
     @Test
     public void shouldCreditCardOrderUnsuccessWithPhone() {
-        open("http://localhost:9999");
-        SelenideElement form = $("form");
-        form.$("[data-test-id=name] input").setValue("Петров Иван Петрович");
-        form.$("[data-test-id=phone] input").setValue("+2222222222222222222222222222222222");
-        form.$("[data-test-id=agreement]").click();
-        form.$("button[type=button]").click();
-        $(".input_invalid[data-test-id=phone] .input__sub")
-                .shouldHave(exactText("Телефон указан неверно. Должно быть 11 цифр, например, +79012345678."));
-    }
+        driver.get("http://localhost:9999");
 
+        WebElement form = driver.findElement(By.cssSelector("form"));
+        form.findElement(By.cssSelector(
+                "[data-test-id=name] input")).sendKeys("Иванов Петр Иванович");
+        form.findElement(By.cssSelector(
+                "[data-test-id=phone] input")).sendKeys("+2222222222222222222222222222222222");
+        form.findElement(By.cssSelector("[data-test-id=agreement]")).click();
+        form.findElement(By.cssSelector("button[type=button]")).click();
+        String text = driver.findElement(
+                By.cssSelector(".input_invalid[data-test-id=phone] .input__sub")).getText();
+
+        assertEquals("Телефон указан неверно. Должно быть 11 цифр, например, +79012345678.", text.trim());
+    }
 }
