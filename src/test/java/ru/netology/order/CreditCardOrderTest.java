@@ -18,6 +18,9 @@ public class CreditCardOrderTest {
     @BeforeAll
     static void setUpAll() {
         System.setProperty("webdriver.chrome.driver", "..\\webdriver\\chromedriver.exe");
+        if (System.getProperty("os.name").contains("nux")) {
+            System.setProperty("webdriver.chrome.driver", "./artifacts/chromedriver");
+        }
     }
 
     @BeforeEach
