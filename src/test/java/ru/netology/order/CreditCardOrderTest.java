@@ -33,4 +33,15 @@ public class CreditCardOrderTest {
                 .shouldHave(exactText("Телефон указан неверно. Должно быть 11 цифр, например, +79012345678."));
     }
 
+    @Test
+    public void shouldCreditCardOrderUnsuccessWithUncheckedAgreement() {
+        open("http://localhost:9999");
+        SelenideElement form = $("form");
+        form.$("[data-test-id=name] input").setValue("Петров Иван Петрович");
+        form.$("[data-test-id=phone] input").setValue("+79099099090");
+        form.$("button[type=button]").click();
+        $(".input_invalid[data-test-id=agreement] .checkbox__text")
+                .shouldHave(exactText("Я соглашаюсь с условиями обработки и использования моих " +
+                        "персональных данных и разрешаю сделать запрос в бюро кредитных историй"));
+    }
 }
